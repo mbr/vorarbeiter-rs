@@ -1,6 +1,8 @@
 [package]
 name = "vorarbeiter"
 description = "A small process supervisor that shutdowns child processes"
+documentation = "https://docs.rs/vorarbeiter"
+repository = "https://github.com/mbr/vorarbeiter-rs"
 version = "0.1.0"
 authors = ["Marc Brinkmann <git@marcbrinkmann.de>"]
 edition = "2018"
