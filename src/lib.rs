@@ -20,6 +20,14 @@ struct Supervisor {
     poll_interval: time::Duration,
 }
 
+impl Drop for Supervisor {
+    fn drop(&mut self) {
+        for child in self.children.iter_mut().rev() {
+            let _ = shutdown_process(child, self.kill_timeout, self.poll_interval);
+        }
+    }
+}
+
 impl Supervisor {
     /// Create a new supervisor with the given kill timeout.
     fn new(kill_timeout: time::Duration) -> Self {
@@ -40,7 +48,7 @@ impl Default for Supervisor {
 /// Shuts down a process using SIGTERM, sending SIGKILL after `timeout`.
 pub fn shutdown_process(
     child: &mut process::Child,
-    timeout: time::Duration,
+    kill_timeout: time::Duration,
     poll_interval: time::Duration,
 ) -> io::Result<process::ExitStatus> {
     let start = time::Instant::now();
@@ -49,7 +57,7 @@ pub fn shutdown_process(
     // Ask nicely via sigterm first.
     signal::kill(pid, signal::Signal::SIGTERM)
         .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
-    while time::Instant::now() - start < timeout {
+    while time::Instant::now() - start < kill_timeout {
         if let Some(exit_status) = child.try_wait()? {
             return Ok(exit_status);
         }
