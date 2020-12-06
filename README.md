@@ -1,6 +1,6 @@
 # Vorarbeiter, a small process supervisor
 
-`vorarbeiter::Supervisor` shuts down processes it owns on `Drop`:
+`vorarbeiter::Supervisor` shuts down processes it owns on `Drop` by sending a `SIGTERM` first, followed by a `SIGKILL`:
 
 ```rust
 use std::process;
