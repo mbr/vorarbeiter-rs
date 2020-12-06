@@ -11,7 +11,7 @@ use std::{io, process, thread, time};
 /// When the supervisor is dropped, it will kill all of its owned child processes using
 /// `shutdown_process` in the reverse order they were added, ignoring any errors.
 #[derive(Debug)]
-struct Supervisor {
+pub struct Supervisor {
     /// Supervised child processes.
     children: Vec<process::Child>,
     /// How long to wait before sending SIGKILL after SIGTERM.
@@ -30,7 +30,7 @@ impl Drop for Supervisor {
 
 impl Supervisor {
     /// Create a new supervisor with the given kill timeout.
-    fn new(kill_timeout: time::Duration) -> Self {
+    pub fn new(kill_timeout: time::Duration) -> Self {
         Supervisor {
             children: Vec::new(),
             kill_timeout,
