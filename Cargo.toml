@@ -9,3 +9,4 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 nix = "0.19.1"
+signal-hook = "0.2.1"
